@@ -1,13 +1,14 @@
 package com.lg;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Client {
+public class Client implements Serializable {
     private String name;
     private String surname;
-    private String PESEL;
+    private String PESEL; //sprawdzać spójność PESEL z datą?
     private String address;
-    private LocalDate dateOfBirth;
+    private transient LocalDate dateOfBirth;
     private boolean discount;
 
     public Client(String name, String surname, String PESEL, String address, LocalDate dateOfBirth) {
@@ -65,5 +66,20 @@ public class Client {
 
     public void setDiscount(boolean discount) {
         this.discount = discount;
+    }
+
+    public void show(){
+        System.out.println(this.name+" "+this.surname+" PESEL: "+this.PESEL+" born on "+this.dateOfBirth.toString()+" addr: "+this.address);
+    }
+
+    public String clientToString(){
+        String client = this.name+" "+this.surname+" PESEL: "+this.PESEL+" born on "+this.dateOfBirth.toString()+" addr: "+this.address;
+        if (this.discount) {
+            client += " discount: YES";
+        }
+        else {
+            client += " discount: NO";
+        }
+        return client;
     }
 }
