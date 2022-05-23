@@ -10,9 +10,9 @@ import java.util.ArrayList;
 public class Client implements Serializable {
     private String name;
     private String surname;
-    private String PESEL; //sprawdzać spójność PESEL z datą?
+    private String PESEL;
     private String address;
-    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class) //needed to serialize data correctly
     private LocalDate dateOfBirth;
     private boolean discount;
 
@@ -22,7 +22,7 @@ public class Client implements Serializable {
         this.PESEL = PESEL;
         this.address = address;
         this.dateOfBirth = dateOfBirth;
-        this.discount = false;
+        this.discount = false; //by default, clients do not have any discounts
     }
 
     public String getName() {
@@ -76,7 +76,7 @@ public class Client implements Serializable {
     public void show(){
         System.out.println(this.name+" "+this.surname+" PESEL: "+this.PESEL+" dateOfBirth: "+this.dateOfBirth.toString()+" address: "+this.address);
     }
-    /*
+    /* //not needed
     @Override
     public String toString(){
         String client = "name: '"+this.name+"', surname: '"+this.surname+"', PESEL: '"+this.PESEL+"', dateOfBirth: '"+this.dateOfBirth.toString()+"', address: '"+this.address;
@@ -92,7 +92,7 @@ public class Client implements Serializable {
      */
 
     public static ArrayList<Client> clientGenerator(){
-
+        //generates clients for testing the app
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MM yyyy");
         ArrayList<Client> clients = new ArrayList<>();
         clients.add(new Client("Wendy", "Byrde", "68041724842", "Lublin, ul. Nadbystrzycka 24", LocalDate.parse("17 04 1968",formatter)));
@@ -102,4 +102,5 @@ public class Client implements Serializable {
         clients.add(new Client("Camino", "Del Rio", "97112374213", "Lublin, ul. Wiejska 12", LocalDate.parse("23 11 1997",formatter)));
         return clients;
     }
+
 }
