@@ -1,14 +1,19 @@
 package com.lg;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 public class Client implements Serializable {
     private String name;
     private String surname;
     private String PESEL; //sprawdzać spójność PESEL z datą?
     private String address;
-    private transient LocalDate dateOfBirth;
+    @JsonSerialize(using = LocalDateSerializer.class)
+    private LocalDate dateOfBirth;
     private boolean discount;
 
     public Client(String name, String surname, String PESEL, String address, LocalDate dateOfBirth) {
@@ -69,17 +74,32 @@ public class Client implements Serializable {
     }
 
     public void show(){
-        System.out.println(this.name+" "+this.surname+" PESEL: "+this.PESEL+" born on "+this.dateOfBirth.toString()+" addr: "+this.address);
+        System.out.println(this.name+" "+this.surname+" PESEL: "+this.PESEL+" dateOfBirth: "+this.dateOfBirth.toString()+" address: "+this.address);
     }
-
-    public String clientToString(){
-        String client = this.name+" "+this.surname+" PESEL: "+this.PESEL+" born on "+this.dateOfBirth.toString()+" addr: "+this.address;
+    /*
+    @Override
+    public String toString(){
+        String client = "name: '"+this.name+"', surname: '"+this.surname+"', PESEL: '"+this.PESEL+"', dateOfBirth: '"+this.dateOfBirth.toString()+"', address: '"+this.address;
         if (this.discount) {
-            client += " discount: YES";
+            client += "', discount: 'true'";
         }
         else {
-            client += " discount: NO";
+            client += "', discount: 'false'";
         }
         return client;
+    }
+
+     */
+
+    public static ArrayList<Client> clientGenerator(){
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MM yyyy");
+        ArrayList<Client> clients = new ArrayList<>();
+        clients.add(new Client("Wendy", "Byrde", "68041724842", "Lublin, ul. Nadbystrzycka 24", LocalDate.parse("17 04 1968",formatter)));
+        clients.add(new Client("Charlotte", "Byrde", "01280443882", "Lublin, ul. Nadbystrzycka 24", LocalDate.parse("04 08 2001",formatter)));
+        clients.add(new Client("Ruth", "Langmore", "05232541543", "Lublin, ul. Wigilina 15", LocalDate.parse("25 03 2005",formatter)));
+        clients.add(new Client("Marthy", "Byrde", "95013069155", "Lublin, ul. Warszawska 7", LocalDate.parse("30 01 1995",formatter)));
+        clients.add(new Client("Camino", "Del Rio", "97112374213", "Lublin, ul. Wiejska 12", LocalDate.parse("23 11 1997",formatter)));
+        return clients;
     }
 }
